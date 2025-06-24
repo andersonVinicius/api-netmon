@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  netmon:
+    build:
+      context: ./monitor
+      dockerfile: Dockerfile.monitor
+    container_name: netmon
+    restart: always
+    volumes:
+      - ./data:/data
+    environment:
+      - DB_PATH=/data/connectivity.db
+
+  api-monitoramento-rede:
+    build:
+      context: ./api-monitor-rede
+      dockerfile: Dockerfile.api
+    container_name: api-monitoramento-rede
+    restart: always
+    depends_on:
+      - netmon
+    volumes:
+      - ./data:/data
+    environment:
+      - DB_PATH=/data/connectivity.db
+    ports:
+      - "8090:8090"
+  backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile.backup
+    container_name: backup-netmon
+    restart: always
+    volumes:
+      - ./data:/data
+
+volumes:
+  data:

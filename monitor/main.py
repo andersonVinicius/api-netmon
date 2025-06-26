@@ -41,7 +41,6 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-print("DB path:", os.getenv("DB_PATH", Path.home() / "internet_logs" / "connectivity.db"))
 
 import argparse
 import os
@@ -59,7 +58,7 @@ try:
 except ImportError:
     requests = None  # HTTP checks disabled if not installed
 
-DEFAULT_DB = Path(os.getenv("DB_PATH", str(Path.home() / "internet_logs" / "connectivity.db")))
+DEFAULT_DB = Path(os.getenv("DB_PATH", str(Path(__file__).resolve().parent / "data" / "connectivity.db")))
 DEFAULT_DB.parent.mkdir(parents=True, exist_ok=True)
 
 SCHEMA_SQL = """

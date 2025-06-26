@@ -1,27 +1,27 @@
-# Imagem mínima para o monitor de conectividade
-FROM python:3.12-slim
+    # Imagem mínima para o monitor de conectividade
+    FROM python:3.12-slim
 
-# Cria usuário não-root
-RUN adduser --disabled-password --gecos "" monitor
+    # Cria usuário não-root
+    RUN adduser --disabled-password --gecos "" monitor
 
-# Define diretório de trabalho
-WORKDIR /app
+    # Define diretório de trabalho
+    WORKDIR /app
 
-# Copia somente requirements para usar cache de camadas Docker
-COPY requirements.txt /app/
+    # Copia somente requirements para usar cache de camadas Docker
+    COPY requirements.txt /app/
 
-# Instala dependências
-RUN pip install --no-cache-dir -r requirements.txt
+    # Instala dependências
+    RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia todo o restante do código (main.py etc)
-COPY . /app/
+    # Copia todo o restante do código (main.py etc)
+    COPY . /app/
 
-# Executa como usuário não-root
-USER root
-RUN mkdir -p /data && chown monitor:monitor /data
-USER monitor
+    # Executa como usuário não-root
+    USER root
+    RUN mkdir -p /data && chown monitor:monitor /data
+    USER monitor
 
-# Comando padrão: roda o script de monitoramento
-CMD ["python", "main.py", "-i", "30", \
-     "--http", "http://192.168.0.1", "https://www.google.com", "https://cloudflare.com", \
-     "--syslog"]
+    # Comando padrão: roda o script de monitoramento
+    CMD ["python", "main.py", "-i", "30", \
+         "--http", "http://192.168.0.1", "https://www.google.com", "https://cloudflare.com", \
+         "--syslog"]

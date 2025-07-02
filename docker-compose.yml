@@ -25,6 +25,31 @@ services:
       - DB_PATH=/data/connectivity.db
     ports:
       - "8090:8090"
+  web-scraping:
+    build:
+      context: ./web-scraping
+      dockerfile: Dockerfile.web-scraping
+    container_name: web-scraping
+    restart: always
+    volumes:
+      - ./data:/data
+    environment:
+      - DB_PATH=/data/connectivity.db
+    env_file:
+      - .env
+
+  monitor-qos:
+    build:
+      context: ./monitor-qos
+      dockerfile: Dockerfile.qos
+    container_name: monitor-qos
+    restart: always
+    volumes:
+      - ./data:/data
+    environment:
+      - DB_PATH=/data/connectivity.db
+
+
   backup:
     build:
       context: ./backup
